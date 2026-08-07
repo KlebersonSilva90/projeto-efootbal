@@ -1,0 +1,8 @@
+{
+  "name": "campeonato-efootball",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/admin.test.js tests/api.test.js tests/classificacao.test.js tests/confrontos.test.js tests/frontend-regras.test.js tests/resumo.test.js tests/tema.test.js"
+  }
+}

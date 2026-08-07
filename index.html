@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Campeonato eFootball</title>
+
+    <script src="js/tema.js"></script>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <header>
+        <h1>🏆 Campeonato eFootball</h1>
+        <p>Cadastro de Resultados</p>
+        <div class="acoes-header">
+          <button id="acessoAdmin" class="acesso-admin" type="button">
+            Área administrativa
+          </button>
+          <button
+            id="alternarTema"
+            class="alternar-tema"
+            type="button"
+            aria-label="Ativar modo escuro"
+            title="Ativar modo escuro"
+          >
+            🌙
+          </button>
+        </div>
+      </header>
+
+      <section class="painel-resumo" aria-label="Resumo do campeonato">
+        <div class="resumo-item">
+          <span>Participantes</span>
+          <strong id="resumoParticipantes">0</strong>
+        </div>
+        <div class="resumo-item">
+          <span>Jogos realizados</span>
+          <strong id="resumoJogosRealizados">0</strong>
+        </div>
+        <div class="resumo-item">
+          <span>Jogos restantes</span>
+          <strong id="resumoJogosRestantes">0</strong>
+        </div>
+        <div class="resumo-item">
+          <span>Rodada atual</span>
+          <strong id="resumoRodadaAtual">—</strong>
+        </div>
+        <div class="resumo-item">
+          <span>Total de gols</span>
+          <strong id="resumoTotalGols">0</strong>
+        </div>
+        <div class="resumo-item">
+          <span>Média de gols</span>
+          <strong id="resumoMediaGols">0,00</strong>
+        </div>
+        <div class="resumo-item">
+          <span>Líder atual</span>
+          <strong id="resumoLider">—</strong>
+        </div>
+        <div class="resumo-item resumo-progresso">
+          <span>Progresso</span>
+          <strong id="resumoProgressoTexto">0%</strong>
+          <progress
+            id="resumoProgresso"
+            max="100"
+            value="0"
+            aria-label="Progresso do campeonato"
+          ></progress>
+        </div>
+      </section>
+
+      <!-- ============================== -->
+      <!-- CADASTRO DE RESULTADO -->
+      <!-- ============================== -->
+
+      <section class="card">
+        <div class="campo controle-admin" hidden>
+          <label for="rodada">Rodada</label>
+
+          <select id="rodada">
+            <option value="1">Rodada 1</option>
+            <option value="2">Rodada 2</option>
+            <option value="3">Rodada 3</option>
+            <option value="4">Rodada 4</option>
+            <option value="5">Rodada 5</option>
+            <option value="6">Rodada 6</option>
+            <option value="7">Rodada 7</option>
+          </select>
+        </div>
+
+        <div class="campo controle-admin" hidden>
+          <label for="mandante">Mandante</label>
+
+          <select id="mandante">
+            <option value="">Selecione...</option>
+          </select>
+        </div>
+
+        <div class="campo controle-admin" hidden>
+          <label for="visitante">Visitante</label>
+
+          <select id="visitante" disabled>
+            <option value="">Selecione...</option>
+          </select>
+        </div>
+
+        <div class="placar controle-admin" hidden>
+          <div class="campo-gol">
+            <label for="golMandante">Gols Mandante</label>
+
+            <input type="number" id="golMandante" min="0" value="0" />
+          </div>
+
+          <span class="versus">X</span>
+
+          <div class="campo-gol">
+            <label for="golVisitante">Gols Visitante</label>
+
+            <input type="number" id="golVisitante" min="0" value="0" />
+          </div>
+        </div>
+
+        <button id="salvarResultado" class="controle-admin" hidden>
+          Salvar Resultado
+        </button>
+
+        <hr />
+
+        <!-- ============================== -->
+        <!-- JOGOS CADASTRADOS -->
+        <!-- ============================== -->
+
+        <h2>Confrontos do Campeonato</h2>
+
+        <div class="filtros-jogos">
+          <div class="campo">
+            <label for="filtroRodada">Filtrar por rodada</label>
+            <select id="filtroRodada">
+              <option value="">Todas</option>
+              <option value="1">Rodada 1</option>
+              <option value="2">Rodada 2</option>
+              <option value="3">Rodada 3</option>
+              <option value="4">Rodada 4</option>
+              <option value="5">Rodada 5</option>
+              <option value="6">Rodada 6</option>
+              <option value="7">Rodada 7</option>
+            </select>
+          </div>
+
+          <div class="campo">
+            <label for="filtroParticipante">Filtrar por participante</label>
+            <select id="filtroParticipante">
+              <option value="">Todos</option>
+            </select>
+          </div>
+
+          <div class="campo">
+            <label for="filtroStatus">Filtrar por status</label>
+            <select id="filtroStatus">
+              <option value="">Todos</option>
+              <option value="pendente">Pendentes</option>
+              <option value="concluido">Concluídos</option>
+            </select>
+          </div>
+        </div>
+
+        <p id="contadorJogos" class="contador-jogos">
+          0 confrontos encontrados.
+        </p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Rodada</th>
+              <th>Mandante</th>
+              <th>Placar</th>
+              <th>Visitante</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+
+          <tbody id="listaJogos">
+            <tr>
+              <td colspan="6">Nenhum confronto disponível.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ============================== -->
+      <!-- CLASSIFICAÇÃO -->
+      <!-- ============================== -->
+
+      <section class="card">
+        <h2>Classificação</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Pos</th>
+              <th>Jogador</th>
+              <th>Pts</th>
+              <th>J</th>
+              <th>V</th>
+              <th>E</th>
+              <th>D</th>
+              <th>GP</th>
+              <th>GC</th>
+              <th>SG</th>
+            </tr>
+          </thead>
+
+          <tbody id="listaClassificacao">
+            <tr>
+              <td colspan="10">Nenhuma classificação disponível.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      <!-- ======================================
+     AUDITORIA DO CAMPEONATO
+====================================== -->
+
+      <section class="card">
+        <h2>🔎 Auditoria do Campeonato</h2>
+
+        <p>
+          Verifique se algum participante possui mais de um jogo cadastrado na
+          mesma rodada.
+        </p>
+
+        <button id="verificarInconsistencias">Verificar inconsistências</button>
+
+        <div id="resultadoAuditoria" style="display: none">
+          <hr />
+
+          <div id="resumoAuditoria"></div>
+
+          <div id="listaInconsistencias"></div>
+        </div>
+      </section>
+    </div>
+
+    <div
+      id="notificacoes"
+      class="notificacoes"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
+
+    <dialog
+      id="modalConfirmacao"
+      class="modal-confirmacao"
+      aria-labelledby="tituloConfirmacao"
+      aria-describedby="mensagemConfirmacao"
+    >
+      <form method="dialog">
+        <h2 id="tituloConfirmacao">Confirmar ação</h2>
+        <p id="mensagemConfirmacao"></p>
+
+        <div class="modal-acoes">
+          <button type="submit" value="cancelar" class="btn-cancelar">
+            Cancelar
+          </button>
+          <button type="submit" value="confirmar" class="btn-confirmar">
+            Confirmar
+          </button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog
+      id="modalAdmin"
+      class="modal-confirmacao"
+      aria-labelledby="tituloAdmin"
+    >
+      <form id="formLoginAdmin">
+        <h2 id="tituloAdmin">Área administrativa</h2>
+        <p>Informe o PIN para cadastrar ou alterar resultados.</p>
+
+        <div class="campo">
+          <label for="pinAdmin">PIN administrativo</label>
+          <input
+            id="pinAdmin"
+            type="password"
+            inputmode="numeric"
+            autocomplete="current-password"
+            required
+          />
+        </div>
+
+        <div class="modal-acoes">
+          <button id="cancelarLoginAdmin" type="button" class="btn-cancelar">
+            Cancelar
+          </button>
+          <button id="entrarAdmin" type="submit">Entrar</button>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- ============================== -->
+    <!-- JAVASCRIPT -->
+    <!-- ============================== -->
+
+    <script src="js/config.js"></script>
+    <script src="js/dom.js"></script>
+    <script src="js/campeonato.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/participantes.js"></script>
+    <script src="js/jogos.js"></script>
+    <script src="js/classificacao.js"></script>
+    <script src="js/resumo.js"></script>
+    <script src="js/auditoria.js"></script>
+    <script src="js/script.js"></script>
+  </body>
+</html>
