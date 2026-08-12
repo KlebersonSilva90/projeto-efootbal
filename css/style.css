@@ -49,6 +49,10 @@
   font-family: Arial, Helvetica, sans-serif;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 body {
   background: var(--cor-fundo);
   color: var(--cor-texto);

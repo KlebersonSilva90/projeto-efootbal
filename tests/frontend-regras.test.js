@@ -6,6 +6,12 @@ const vm = require("node:vm");
 
 const raiz = path.resolve(__dirname, "..");
 
+test("atributo hidden prevalece sobre os layouts dos controles administrativos", () => {
+  const css = fs.readFileSync(path.join(raiz, "css", "style.css"), "utf8");
+
+  assert.match(css, /\[hidden\]\s*\{[^}]*display:\s*none\s*!important;/s);
+});
+
 function criarContextoFrontend() {
   const notificacoes = [];
   const elementos = {
