@@ -12,6 +12,18 @@ test("atributo hidden prevalece sobre os layouts dos controles administrativos",
   assert.match(css, /\[hidden\]\s*\{[^}]*display:\s*none\s*!important;/s);
 });
 
+test("formulário administrativo permanece oculto no celular sem login", () => {
+  const css = fs.readFileSync(
+    path.join(raiz, "css", "responsive.css"),
+    "utf8",
+  );
+
+  assert.match(
+    css,
+    /@media\s*\(max-width:\s*449px\)[\s\S]*body:not\(\.admin-autenticado\) \.controle-admin[\s\S]*display:\s*none\s*!important;/,
+  );
+});
+
 function criarContextoFrontend() {
   const notificacoes = [];
   const elementos = {

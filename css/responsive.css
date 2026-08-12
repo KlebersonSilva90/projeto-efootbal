@@ -56,4 +56,9 @@
   .painel-resumo {
     display: none;
   }
+
+  body:not(.admin-autenticado) .controle-admin,
+  body:not(.admin-autenticado) .separador-admin {
+    display: none !important;
+  }
 }
