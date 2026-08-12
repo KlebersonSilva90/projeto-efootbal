@@ -34,8 +34,8 @@ async function iniciarSistema() {
 
     let confrontos = (await buscarConfrontos()) ?? [];
 
-    if (confrontos.length === 0 && adminEstaAutenticado()) {
-      confrontos = (await gerarConfrontosAPI()) ?? [];
+    if (!confrontosEstaoSincronizadosNoCliente(confrontos)) {
+      confrontos = await tentarSincronizarConfrontos(confrontos);
     }
 
     campeonato.confrontos = Array.isArray(confrontos) ? confrontos : [];
@@ -52,6 +52,48 @@ async function iniciarSistema() {
       "erro",
       6000,
     );
+  }
+}
+
+function confrontosEstaoSincronizadosNoCliente(confrontos) {
+  const idsAtuais = campeonato.participantes
+    .map((participante) => Number(participante.id))
+    .sort((a, b) => a - b);
+  const idsProgramados = [
+    ...new Set(
+      confrontos.flatMap((confronto) => [
+        Number(confronto.mandante),
+        Number(confronto.visitante),
+      ]),
+    ),
+  ].sort((a, b) => a - b);
+
+  return idsAtuais.length === idsProgramados.length &&
+    idsAtuais.every((id, indice) => id === idsProgramados[indice]);
+}
+
+async function tentarSincronizarConfrontos(confrontosAtuais) {
+  if (!adminEstaAutenticado()) {
+    mostrarNotificacao(
+      "A lista de participantes mudou. Entre como administrador para atualizar o calendário.",
+      "aviso",
+      7000,
+    );
+    return confrontosAtuais;
+  }
+
+  try {
+    const confrontosAtualizados = await gerarConfrontosAPI();
+    return Array.isArray(confrontosAtualizados)
+      ? confrontosAtualizados
+      : confrontosAtuais;
+  } catch (erro) {
+    mostrarNotificacao(
+      erro?.message || "Não foi possível atualizar o calendário.",
+      "aviso",
+      9000,
+    );
+    return confrontosAtuais;
   }
 }
 

@@ -22,6 +22,14 @@ function gerar(ids) {
   return JSON.parse(JSON.stringify(contexto.montarConfrontos(ids)));
 }
 
+function sincronizados(ids, confrontos) {
+  const contexto = vm.createContext({});
+
+  vm.runInContext(codigo, contexto);
+
+  return contexto.confrontosEstaoSincronizados(ids, confrontos);
+}
+
 test("gera sete rodadas e 28 confrontos para oito participantes", () => {
   const confrontos = gerar([1, 2, 3, 4, 5, 6, 7, 8]);
 
@@ -82,4 +90,22 @@ test("trata quantidade ímpar com uma folga por rodada", () => {
       2,
     );
   }
+});
+
+test("detecta participante adicionado depois da geração do calendário", () => {
+  const confrontos = gerar([1, 2, 3, 4]);
+
+  assert.equal(sincronizados([1, 2, 3, 4, 5], confrontos), false);
+});
+
+test("detecta participante removido depois da geração do calendário", () => {
+  const confrontos = gerar([1, 2, 3, 4]);
+
+  assert.equal(sincronizados([1, 2, 3], confrontos), false);
+});
+
+test("reconhece calendário correspondente aos participantes atuais", () => {
+  const confrontos = gerar([1, 2, 3, 4, 5, 6]);
+
+  assert.equal(sincronizados([6, 4, 2, 5, 1, 3], confrontos), true);
 });

@@ -54,8 +54,10 @@ async function entrarComoAdministrador(evento) {
       modal.close();
       atualizarInterfaceAdmin();
 
-      if (campeonato.confrontos.length === 0) {
-        campeonato.confrontos = (await gerarConfrontosAPI()) ?? [];
+      if (!confrontosEstaoSincronizadosNoCliente(campeonato.confrontos)) {
+        campeonato.confrontos = await tentarSincronizarConfrontos(
+          campeonato.confrontos,
+        );
         carregarRodadasConfrontos();
         atualizarMandantesDaRodada();
         atualizarTabelaJogos();
